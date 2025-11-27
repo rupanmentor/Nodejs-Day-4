@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import connectDB from "./Database/dbConfig.js";
+import productRoute from "./Routers/productRouter.js"
 
 //Dotenv configuration
 
@@ -26,6 +27,12 @@ connectDB();
 app.get("/", (req, res) => {
   res.status(200).send("Welcome to the API");
 });
+
+//Custom routes
+
+app.use("/api/products",productRoute)
+
+
 
 //Port
 
