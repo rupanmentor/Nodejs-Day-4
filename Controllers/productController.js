@@ -38,7 +38,7 @@ export const getProductById = async (req, res) => {
     const productId = req.params.id;
     const productDetail = await products.findById(productId);
     if (!productDetail) {
-      res.status(404).json({ message: "Product Not Found" });
+      return res.status(404).json({ message: "Product Not Found" });
     }
     res
       .status(200)
@@ -46,6 +46,50 @@ export const getProductById = async (req, res) => {
   } catch (error) {
     res.status(503).json({
       message: "Cannot Retrieve the product, Error in get product by id",
+    });
+  }
+};
+
+//Update Product
+
+export const updateProduct = async (req, res) => {
+  try {
+    const productId = req.params.id;
+    const { name, price } = req.body;
+    const result = await products.findByIdAndUpdate(
+      { _id: productId },
+      { name, price },
+      { new: true }
+    );
+    if (!result) {
+      return res.status(404).json({ message: "Product Not Found" });
+    }
+    res
+      .status(200)
+      .json({ message: "Product Updated Successfully", data: result });
+  } catch (error) {
+    res.status(503).json({
+      message: "Cannot Update the product, Error in Update product",
+    });
+  }
+};
+
+// Delete Product
+
+export const deleteProduct = async (req, res) => {
+  try {
+    const productId = req.params.id;
+    const result = await products.findByIdAndDelete({ _id: productId });
+    if (!result) {
+      return res.status(404).json({ message: "Product Not Found" });
+    }
+    const prod = await products.find();
+    res
+      .status(200)
+      .json({ message: "Products Deleted Successfully", data: result });
+  } catch (error) {
+    res.status(503).json({
+      message: "Cannot delete the product, Error in delete product",
     });
   }
 };
